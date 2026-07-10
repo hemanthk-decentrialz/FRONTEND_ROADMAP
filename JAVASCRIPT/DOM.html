@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript DOM Demo</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div id="app">
+        <h1>👥 User Management</h1>
+        
+        <!-- Stats Section -->
+        <div class="stats" id="stats">
+            <div class="stats-item">
+                <div class="number" id="totalUsers">0</div>
+                <div class="label">Total Users</div>
+            </div>
+            <div class="stats-item">
+                <div class="number" id="activeUsers">0</div>
+                <div class="label">Active Users</div>
+            </div>
+            <div class="stats-item">
+                <div class="number" id="inactiveUsers">0</div>
+                <div class="label">Inactive Users</div>
+            </div>
+        </div>
+        
+        <!-- Form Section -->
+        <form id="userForm">
+            <div class="form-group">
+                <label for="nameInput">Full Name</label>
+                <input type="text" id="nameInput" placeholder="Enter name" required>
+            </div>
+            <div class="form-group">
+                <label for="ageInput">Age</label>
+                <input type="number" id="ageInput" placeholder="Enter age" min="1" max="120" required>
+            </div>
+            <div class="form-group">
+                <label for="emailInput">Email</label>
+                <input type="email" id="emailInput" placeholder="Enter email" required>
+            </div>
+            <button type="submit">➕ Add User</button>
+        </form>
+        
+        <!-- Error/Success Display -->
+        <div id="errorDisplay"></div>
+        
+        <!-- User List -->
+        <div id="userList">
+            <div class="empty-state">
+                <p>📭 No users yet. Add your first user above!</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ES6 Module -->
+    <script type="module" src="es6-modules.js"></script>
+    <!-- DOM Script -->
+    <script type="module" src="dom-script.js"></script>
+</body>
+</html>
