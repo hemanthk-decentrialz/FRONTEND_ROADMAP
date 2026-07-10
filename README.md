@@ -27,11 +27,11 @@ This repository is my personal journey through frontend development, containing 
 This is a full frontend project. Here's how to run it based on its structure:
 
 ### If it's a Static Project (HTML/CSS/JS):
-# Method 1: Direct Open
-# Navigate to MediConnect folder and double-click index.html
+ **Method 1: Direct Open**
+ Navigate to MediConnect folder and double-click index.html
 
-# Method 2: Live Server (Recommended)
-# Open the folder in VS Code and click "Go Live" from the status bar
+ **Method 2: Live Server (Recommended)**
+ Open the folder in VS Code and click "Go Live" from the status bar
 
 ### React Tutorial (`react-tutorial`)
 The React app requires Node.js and npm. Please refer to its specific guide:
