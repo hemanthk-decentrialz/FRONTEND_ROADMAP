@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌐 HTML5 · complete module demo</title>
+    <!-- combined CSS (external style sheet) -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- ============================================================
+    HEADER (semantic) + navigation
+    ============================================================ -->
+    <header>
+        <h1>📘 HTML5 · Module 2</h1>
+        <p class="subhead">one file · all concepts · accessible &amp; styled</p>
+        <nav aria-label="Main navigation">
+            <ul>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#text">Text</a></li>
+                <li><a href="#media">Media</a></li>
+                <li><a href="#tables">Tables</a></li>
+                <li><a href="#forms">Forms</a></li>
+                <li><a href="#semantic">Semantic</a></li>
+                <li><a href="#accessibility">A11y</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- main content wrapper -->
+    <main>
+
+        <!-- ============================================================
+        SECTION : HTML BASICS (document structure, tags, attributes, comments)
+        ============================================================ -->
+        <section id="basics" aria-labelledby="basics-heading">
+            <h2 id="basics-heading">🧱 HTML Basics</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Document structure</h3>
+                    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;…&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </div>
+                <div class="card">
+                    <h3>Tags &amp; elements</h3>
+                    <p><strong>block</strong> vs <strong>inline</strong>:</p>
+                    <div class="demo-block">&lt;div&gt; block &lt;/div&gt;</div>
+                    <span class="demo-inline">&lt;span&gt; inline &lt;/span&gt;</span>
+                </div>
+                <div class="card">
+                    <h3>Attributes</h3>
+                    <p><code>class="highlight"</code> · <code>id="unique"</code></p>
+                    <p class="highlight" id="unique">This paragraph has a class and an id.</p>
+                </div>
+                <div class="card">
+                    <h3>Comments</h3>
+                    <pre><code>&lt;!-- visible only in source --&gt;</code></pre>
+                    <p class="muted">(view page source to see the comment)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        SECTION : TEXT ELEMENTS
+        ============================================================ -->
+        <section id="text" aria-labelledby="text-heading">
+            <h2 id="text-heading">✍️ Text elements</h2>
+
+            <div class="flex-row">
+                <div class="col">
+                    <h3>Headings</h3>
+                    <h1>h1 · main title</h1>
+                    <h2>h2 · section</h2>
+                    <h3>h3 · sub-section</h3>
+                    <h4>h4 · detail</h4>
+                    <h5>h5 · fine print</h5>
+                    <h6>h6 · tiny</h6>
+                </div>
+                <div class="col">
+                    <h3>Paragraphs &amp; formatting</h3>
+                    <p>This is a <strong>strong</strong> and <em>emphasized</em> text.</p>
+                    <p><u>underlined</u> · <mark>marked</mark> · <small>small</small></p>
+                    <p><del>deleted</del> · <ins>inserted</ins> · <sup>sup</sup> · <sub>sub</sub></p>
+                    <p><code>inline code</code> · <kbd>Ctrl</kbd>+<kbd>C</kbd></p>
+                </div>
+                <div class="col">
+                    <h3>Quotes</h3>
+                    <blockquote cite="https://example.com">
+                        “This is a blockquote – a longer quotation.”
+                    </blockquote>
+                    <p>As the saying goes: <q>short inline quote</q>.</p>
+                    <figure>
+                        <blockquote>
+                            “The only source of knowledge is experience.”
+                        </blockquote>
+                        <figcaption>— <cite>Albert Einstein</cite></figcaption>
+                    </figure>
+                </div>
+                <div class="col">
+                    <h3>Lists</h3>
+                    <h4>Unordered</h4>
+                    <ul>
+                        <li>Apples</li>
+                        <li>Oranges</li>
+                        <li>Bananas</li>
+                    </ul>
+                    <h4>Ordered</h4>
+                    <ol>
+                        <li>First step</li>
+                        <li>Second step</li>
+                        <li>Third step</li>
+                    </ol>
+                    <h4>Definition</h4>
+                    <dl>
+                        <dt>HTML</dt>
+                        <dd>HyperText Markup Language</dd>
+                        <dt>CSS</dt>
+                        <dd>Cascading Style Sheets</dd>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        SECTION : LINKS & MEDIA
+        ============================================================ -->
+        <section id="media" aria-labelledby="media-heading">
+            <h2 id="media-heading">🔗 Links &amp; Media</h2>
+
+            <div class="flex-row">
+                <div class="col">
+                    <h3>Hyperlinks</h3>
+                    <p><a href="#basics">internal anchor (go to basics)</a></p>
+                    <p><a href="https://example.com" target="_blank">external link (opens new tab)</a></p>
+                    <p><a href="mailto:demo@example.com">email link</a></p>
+                    <p><a href="#" aria-label="download (dummy)">download (dummy)</a></p>
+                </div>
+                <div class="col">
+                    <h3>Images</h3>
+                    <img src="https://picsum.photos/200/120?random=1" alt="random placeholder image from picsum" width="200" height="120" loading="lazy" />
+                    <p><code>alt</code> text is present :)</p>
+                </div>
+                <div class="col">
+                    <h3>Audio</h3>
+                    <audio controls>
+                        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                    </audio>
+                    <p class="muted">(example track – courtesy SoundHelix)</p>
+                </div>
+                <div class="col">
+                    <h3>Video</h3>
+                    <video controls width="200" poster="https://picsum.photos/200/120?random=2">
+                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+                        Your browser does not support the video element.
+                    </video>
+                </div>
+                <div class="col">
+                    <h3>iframe</h3>
+                    <iframe src="https://example.com" title="example iframe" width="200" height="120" loading="lazy"></iframe>
+                    <p class="muted">(example.com embedded)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        SECTION : TABLES (rowspan + colspan)
+        ============================================================ -->
+        <section id="tables" aria-labelledby="tables-heading">
+            <h2 id="tables-heading">📊 Tables</h2>
+            <div class="table-responsive">
+                <table>
+                    <caption>Employee schedule (rowspan + colspan demo)</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Monday</th>
+                            <th scope="col">Tuesday</th>
+                            <th scope="col">Wednesday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Alice</th>
+                            <td rowspan="2">9-12</td>   <!-- rowspan 2 -->
+                            <td>14-18</td>
+                            <td>9-12</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Bob</th>
+                            <!-- rowspan cell above covers this slot -->
+                            <td colspan="2">13-17</td>  <!-- colspan 2 -->
+                        </tr>
+                        <tr>
+                            <th scope="row">Carol</th>
+                            <td>8-12</td>
+                            <td>8-12</td>
+                            <td rowspan="2">off</td>   <!-- rowspan 2 -->
+                        </tr>
+                        <tr>
+                            <th scope="row">Dave</th>
+                            <td colspan="2">10-15</td>
+                            <!-- off cell covers this slot -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="muted">Cells with <code>rowspan</code> and <code>colspan</code> are used.</p>
+        </section>
+
+        <!-- ============================================================
+        SECTION : FORMS (all input types, labels, validation, buttons)
+        ============================================================ -->
+        <section id="forms" aria-labelledby="forms-heading">
+            <h2 id="forms-heading">📝 Forms</h2>
+
+            <form id="demo-form" class="form-grid" novalidate>
+                <!-- text input -->
+                <div class="form-group">
+                    <label for="fname">Full name <span aria-hidden="true">*</span></label>
+                    <input type="text" id="fname" name="fname" placeholder="e.g. Jane Doe" required />
+                </div>
+
+                <!-- email -->
+                <div class="form-group">
+                    <label for="email">Email <span aria-hidden="true">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+                </div>
+
+                <!-- number -->
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="18" max="99" placeholder="18–99" />
+                </div>
+
+                <!-- date -->
+                <div class="form-group">
+                    <label for="dob">Date of birth</label>
+                    <input type="date" id="dob" name="dob" />
+                </div>
+
+                <!-- select / dropdown -->
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country" name="country">
+                        <option value="">— choose —</option>
+                        <option value="US">United States</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="IN">India</option>
+                        <option value="DE">Germany</option>
+                    </select>
+                </div>
+
+                <!-- radio group -->
+                <fieldset class="form-group">
+                    <legend>Preferred contact</legend>
+                    <label><input type="radio" name="contact" value="email" checked /> Email</label>
+                    <label><input type="radio" name="contact" value="phone" /> Phone</label>
+                    <label><input type="radio" name="contact" value="sms" /> SMS</label>
+                </fieldset>
+
+                <!-- checkbox -->
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="newsletter" value="yes" />
+                        Subscribe to newsletter
+                    </label>
+                </div>
+
+                <!-- range + output -->
+                <div class="form-group">
+                    <label for="rating">Rating: <output id="rating-output">5</output></label>
+                    <input type="range" id="rating" name="rating" min="1" max="10" value="5"
+                    oninput="document.getElementById('rating-output').value = this.value;" />
+                </div>
+
+                <!-- file input -->
+                <div class="form-group">
+                    <label for="avatar">Avatar (image)</label>
+                    <input type="file" id="avatar" name="avatar" accept="image/*" />
+                </div>
+
+                <!-- password -->
+                <div class="form-group">
+                    <label for="pwd">Password <span aria-hidden="true">*</span></label>
+                    <input type="password" id="pwd" name="pwd" placeholder="min 6 chars" minlength="6" required />
+                </div>
+
+                <!-- textarea -->
+                <div class="form-group full-width">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" rows="3" placeholder="tell us about yourself…"></textarea>
+                </div>
+
+                <!-- buttons -->
+                <div class="form-actions full-width">
+                    <button type="submit" class="btn primary">Submit</button>
+                    <button type="reset" class="btn secondary">Reset</button>
+                    <button type="button" class="btn outline" onclick="alert('Hello from a button!')">Alert</button>
+                </div>
+
+                <!-- validation hint (built-in) -->
+                <p class="muted full-width">* required fields · HTML5 validation active (try submitting empty).</p>
+            </form>
+        </section>
+
+        <!-- ============================================================
+        SECTION : SEMANTIC HTML (aside, article, etc.)
+        ============================================================ -->
+        <section id="semantic" aria-labelledby="semantic-heading">
+            <h2 id="semantic-heading">🧩 Semantic HTML</h2>
+            <div class="semantic-grid">
+                <article class="sem-card">
+                    <header><h3>&lt;article&gt;</h3></header>
+                    <p>Self-contained content, like a blog post or news story.</p>
+                </article>
+                <section class="sem-card">
+                    <header><h3>&lt;section&gt;</h3></header>
+                    <p>Thematic grouping of content, usually with a heading.</p>
+                </section>
+                <aside class="sem-card">
+                    <header><h3>&lt;aside&gt;</h3></header>
+                    <p>Sidebar or complementary information.</p>
+                </aside>
+                <div class="sem-card">
+                    <header><h3>&lt;nav&gt;</h3></header>
+                    <p>Primary navigation block (used in the header).</p>
+                </div>
+                <div class="sem-card">
+                    <header><h3>&lt;main&gt;</h3></header>
+                    <p>Dominant content of the page (this whole section is inside &lt;main&gt;).</p>
+                </div>
+                <div class="sem-card">
+                    <header><h3>&lt;footer&gt;</h3></header>
+                    <p>Footer of the page or section (see page bottom).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+        SECTION : ACCESSIBILITY BASICS
+        ============================================================ -->
+        <section id="accessibility" aria-labelledby="a11y-heading">
+            <h2 id="a11y-heading">♿ Accessibility basics</h2>
+            <div class="flex-row">
+                <div class="col">
+                    <h3>aria attributes</h3>
+                    <div role="alert" aria-live="polite" class="aria-box">
+                        This div has <code>role="alert"</code> and <code>aria-live="polite"</code>.
+                    </div>
+                    <button aria-label="close dialog" class="btn">✕</button>
+                    <p><code>aria-label</code> on the button above.</p>
+                </div>
+                <div class="col">
+                    <h3>alt text</h3>
+                    <img src="https://picsum.photos/120/80?random=3" alt="decorative random image with alt text" />
+                    <p>Image with descriptive <code>alt</code>.</p>
+                </div>
+                <div class="col">
+                    <h3>Labels &amp; keyboard navigation</h3>
+                    <p>All form fields have explicit <code>&lt;label&gt;</code>s.</p>
+                    <p><kbd>Tab</kbd> through the page – focus indicators are visible.</p>
+                    <a href="#" class="focus-demo">focusable link</a>
+                    <button class="btn" tabindex="0">focusable button</button>
+                </div>
+                <div class="col">
+                    <h3>Skip link (hidden until focus)</h3>
+                    <a href="#main" class="skip-link">Skip to main content</a>
+                    <p class="muted">(press <kbd>Tab</kbd> to see it appear)</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================================
+    FOOTER (semantic)
+    ============================================================ -->
+    <footer>
+        <p>&copy; 2025 · HTML5 Module 2 demo – all concepts in one file.</p>
+        <nav aria-label="Footer navigation">
+            <a href="#basics">Basics</a> ·
+            <a href="#text">Text</a> ·
+            <a href="#media">Media</a> ·
+            <a href="#tables">Tables</a> ·
+            <a href="#forms">Forms</a> ·
+            <a href="#semantic">Semantic</a> ·
+            <a href="#accessibility">A11y</a>
+        </nav>
+        <p class="muted">Accessible &amp; responsive · with CSS</p>
+    </footer>
+
+</body>
+</html>
