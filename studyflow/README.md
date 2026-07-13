@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 StudyFlow
 
-## Getting Started
+A modern student productivity dashboard built with **Next.js**, **React**, **TypeScript**, and **Tailwind CSS**.
 
-First, run the development server:
+StudyFlow helps students organize their study schedule, manage notes, track goals, and improve focus using the Pomodoro technique—all in a clean, responsive interface with Light/Dark mode support.
+
+---
+
+## ✨ Features
+
+### 📊 Dashboard
+- Personalized welcome section
+- Productivity statistics
+- Daily motivational quote
+- Responsive dashboard cards
+
+### 📅 Study Planner
+- Create study sessions
+- Select subject, priority, and time slot
+- Mark sessions as completed
+- Delete sessions
+- Local storage persistence
+
+### 📝 Notes
+- Create subject-wise notes
+- Search notes instantly
+- Delete notes
+- Responsive card layout
+
+### ⏱ Pomodoro Timer
+- Pomodoro
+- Short Break
+- Long Break
+- Start / Pause / Reset controls
+- Session counter
+- Local storage persistence
+
+### 🎯 Goal Tracker
+- Create study goals
+- Progress tracking
+- Increase/Decrease progress
+- Deadline management
+- Progress bar visualization
+
+### ⚙ Settings
+- Light Mode / Dark Mode
+- Local storage preferences
+- Clear application data
+
+### 🔐 Authentication
+- Frontend authentication
+- Login page
+- Protected dashboard routes
+- Persistent user session
+
+---
+
+# 🛠 Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| Next.js 15 | React Framework |
+| React 19 | UI Library |
+| TypeScript | Type Safety |
+| Tailwind CSS 4 | Styling |
+| Font Awesome | Icons |
+| Local Storage | Data Persistence |
+
+---
+
+# 📂 Project Structure
+
+```
+studyflow
+│
+├── app
+│   ├── login
+│   ├── (dashboard)
+│   │   ├── planner
+│   │   ├── notes
+│   │   ├── goals
+│   │   ├── timer
+│   │   ├── settings
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── globals.css
+│   └── layout.tsx
+│
+├── components
+│   ├── auth
+│   ├── dashboard
+│   ├── goals
+│   ├── layout
+│   ├── notes
+│   ├── planner
+│   ├── timer
+│   └── ui
+│
+├── context
+├── hooks
+├── data
+├── lib
+├── types
+└── utils
+```
+
+---
+
+# 🚀 Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/your-username/studyflow.git
+```
+
+Go to the project folder
+
+```bash
+cd studyflow
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Feel free to use and modify it for learning purposes.
