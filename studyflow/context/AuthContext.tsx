@@ -11,7 +11,6 @@ import { User } from "@/types/auth";
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-
   login: (user: User) => void;
   logout: () => void;
 }
@@ -27,19 +26,19 @@ interface Props {
 export function AuthProvider({
   children,
 }: Props) {
-  
-const [user, setUser] =
-  useLocalStorage<User | null>(
-    "studyflow-user",
-    null
-  );
+  const [user, setUser] =
+    useLocalStorage<User | null>(
+      "studyflow-user",
+      null
+    );
+
   function login(user: User) {
-  setUser(user);
-}
+    setUser(user);
+  }
 
   function logout() {
-  setUser(null);
-}
+    setUser(null);
+  }
 
   return (
     <AuthContext.Provider
@@ -56,8 +55,7 @@ const [user, setUser] =
 }
 
 export function useAuthContext() {
-  const context =
-    useContext(AuthContext);
+  const context = useContext(AuthContext);
 
   if (!context) {
     throw new Error(

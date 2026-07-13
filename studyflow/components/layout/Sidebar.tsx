@@ -40,7 +40,7 @@ export default function Sidebar({
 
     return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose]);
-
+  
   return (
     <>
       {isOpen && (
@@ -86,7 +86,7 @@ export default function Sidebar({
                   StudyFlow
                 </h1>
 
-                <p className="text-muted text-sm">
+                <p className="text-muted text-sm" suppressHydrationWarning>
                   {user?.email}
                 </p>
               </div>
@@ -112,7 +112,7 @@ export default function Sidebar({
             Welcome back
           </p>
 
-          <h2 className="mt-1 text-xl font-bold">
+          <h2 className="mt-1 text-xl font-bold" suppressHydrationWarning>
             {user?.name}
           </h2>
 

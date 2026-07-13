@@ -1,70 +1,69 @@
 "use client";
 
-import { useMemo } from "react";
 import useAuth from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBars,
-  faChevronDown,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faChevronDown} from "@fortawesome/free-solid-svg-icons";
+import { getGreeting } from "@/utils/greetings";
+import { formatDate } from "@/utils/formatDate";
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
-export default function Header({ onMenuClick }: HeaderProps) {
+export default function Header({
+  onMenuClick,
+}: HeaderProps) {
   const router = useRouter();
+
   const { user, logout } = useAuth();
 
-  const formattedDate = useMemo(() => {
-    return new Date().toLocaleDateString("en-US", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  }, []);
+  const greeting = getGreeting();
 
-  const hour = new Date().getHours();
-
-  const greeting =
-    hour < 12
-      ? "Good Morning"
-      : hour < 18
-      ? "Good Afternoon"
-      : "Good Evening";
+  const formattedDate = formatDate();
 
   return (
     <header
       className="glass sticky top-0 z-30 flex items-center justify-between border-b px-5 py-4 backdrop-blur-xl"
-      style={{ borderColor: "var(--border)" }}
+      style={{
+        borderColor: "var(--border)",
+      }}
     >
       {/* Left */}
+
       <div className="flex items-center gap-4">
         <button
           onClick={onMenuClick}
           aria-label="Open navigation"
           className="icon-button rounded-xl p-3 transition lg:hidden"
         >
-          <FontAwesomeIcon icon={faBars} className="text-lg" />
+          <FontAwesomeIcon
+            icon={faBars}
+            className="text-lg"
+          />
         </button>
 
         <div>
           <h2
             className="text-2xl font-bold"
-            style={{ color: "var(--foreground)" }}
+            style={{
+              color: "var(--foreground)",
+            }}
           >
             {greeting}
           </h2>
 
-          <p className="text-muted mt-1 text-sm">
+          <p
+            className="text-muted mt-1 text-sm"
+            suppressHydrationWarning
+          >
             {formattedDate}
           </p>
         </div>
       </div>
 
       {/* Right */}
+
       <div className="flex items-center gap-4">
         <button className="surface surface-hover flex items-center gap-3 rounded-2xl px-3 py-2">
           <div className="gradient-primary flex h-11 w-11 items-center justify-center rounded-full text-sm font-bold text-white">
@@ -79,12 +78,18 @@ export default function Header({ onMenuClick }: HeaderProps) {
           <div className="hidden text-left md:block">
             <p
               className="text-sm font-semibold"
-              style={{ color: "var(--foreground)" }}
+              style={{
+                color: "var(--foreground)",
+              }}
+              suppressHydrationWarning
             >
               {user?.name}
             </p>
 
-            <p className="text-muted text-xs">
+            <p
+              className="text-muted text-xs"
+              suppressHydrationWarning
+            >
               {user?.email}
             </p>
           </div>
