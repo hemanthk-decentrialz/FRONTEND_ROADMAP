@@ -9,13 +9,33 @@ import useAuth from "@/hooks/useAuth";
 export default function HomePage() {
   const router = useRouter();
 
-  const { isAuthenticated } = useAuth();
+  const {
+    isAuthenticated,
+    isReady,
+  } = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (
+      isReady &&
+      !isAuthenticated
+    ) {
       router.replace("/login");
     }
-  }, [isAuthenticated, router]);
+  }, [
+    isReady,
+    isAuthenticated,
+    router,
+  ]);
+
+  if (!isReady) {
+    return (
+      <div className="flex h-[70vh] items-center justify-center">
+        <p className="text-muted">
+          Loading...
+        </p>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return null;

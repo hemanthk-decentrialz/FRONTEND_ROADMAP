@@ -67,12 +67,14 @@ export default function Header({
       <div className="flex items-center gap-4">
         <button className="surface surface-hover flex items-center gap-3 rounded-2xl px-3 py-2">
           <div className="gradient-primary flex h-11 w-11 items-center justify-center rounded-full text-sm font-bold text-white">
+            <p className="text-white text-sm" suppressHydrationWarning>
             {user?.name
               ?.split(" ")
               .map((n) => n[0])
               .join("")
               .slice(0, 2)
               .toUpperCase()}
+            </p>  
           </div>
 
           <div className="hidden text-left md:block">

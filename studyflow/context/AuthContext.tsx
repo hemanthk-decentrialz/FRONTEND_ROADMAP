@@ -15,9 +15,10 @@ interface AuthContextType {
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | null>(
-  null
-);
+const AuthContext =
+  createContext<AuthContextType | null>(
+    null
+  );
 
 interface Props {
   children: ReactNode;
@@ -55,7 +56,8 @@ export function AuthProvider({
 }
 
 export function useAuthContext() {
-  const context = useContext(AuthContext);
+  const context =
+    useContext(AuthContext);
 
   if (!context) {
     throw new Error(

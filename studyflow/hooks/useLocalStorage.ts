@@ -11,13 +11,23 @@ export default function useLocalStorage<T>(
   key: string,
   initialValue: T
 ) {
-   const [storedValue, setStoredValue] = useState<T>(() =>
-    getStorageItem<T>(key, initialValue)
+  const [storedValue, setStoredValue] =
+    useState<T>(() =>
+      getStorageItem<T>(
+        key,
+        initialValue
+      )
     );
 
   useEffect(() => {
-    setStorageItem(key, storedValue);
+    setStorageItem(
+      key,
+      storedValue
+    );
   }, [key, storedValue]);
 
-  return [storedValue, setStoredValue] as const;
+  return [
+    storedValue,
+    setStoredValue,
+  ] as const;
 }

@@ -9,7 +9,7 @@ export default function Dashboard() {
   const { planner, notes, goals, timer, completedGoals, completionRate } = useDashboardData();
 
   return (
-    <main className="mx-auto max-w-7xl space-y-8 animate-fade">
+    <main className="mx-auto max-w-7xl space-y-8 animate-fade" suppressHydrationWarning>
       <WelcomeCard />
       <section>
         <div className="mb-5 flex items-center justify-between">
