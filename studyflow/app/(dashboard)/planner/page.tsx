@@ -45,7 +45,7 @@ export default function PlannerPage(){
 
         <div className="space-y-5 lg:col-span-2">
           { sessions.length===0 ? ( 
-          <div className="rounded-xl bg-white p-8 text-center">
+          <div className="dashboard-card p-8 text-center">
             No study sessions yet.
           </div>
           ) : (

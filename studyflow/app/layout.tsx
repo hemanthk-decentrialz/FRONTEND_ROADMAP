@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import ThemeInitializer from "@/components/settings/ThemeInitializer";
 
 export const metadata: Metadata = {
   title: "StudyFlow",
@@ -16,6 +17,8 @@ export default function RootLayout({ children,}: Readonly<{
     <body>
 
     <AuthProvider>
+
+    <ThemeInitializer />
 
     {children}
 

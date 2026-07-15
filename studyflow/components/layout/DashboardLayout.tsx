@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import TimerCompletionNotifier from "@/components/timer/TimerCompletionNotifier";
+import TimerTicker from "@/components/timer/TimerTicker";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -61,6 +63,9 @@ export default function DashboardLayout({
           {children}
         </main>
       </div>
+
+      <TimerTicker />
+      <TimerCompletionNotifier />
     </div>
   );
 }

@@ -9,4 +9,6 @@ export interface TimerState {
   isRunning: boolean;
   completedSessions: number;
   endAt?: number;
+  lastCompletedAt?: number;
+  lastCompletedMode?: TimerMode;
 }

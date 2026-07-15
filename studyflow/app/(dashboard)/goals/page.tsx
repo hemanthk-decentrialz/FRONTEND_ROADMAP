@@ -74,17 +74,21 @@ export default function GoalsPage() {
             Add Goal
           </h2>
           <div className="space-y-4">
-            <input type="text"placeholder="Goal Title" value={title}
+            <input
+              type="text"
+              placeholder="Goal Title"
+              value={title}
               onChange={(e) =>
                 setTitle(e.target.value)
               }
-              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white p-3 outline-none focus:border-blue-500 transition"
+              className="input-theme w-full rounded-lg p-3"
             />
-            <select value={subject}
+            <select
+              value={subject}
               onChange={(e) =>
                 setSubject(e.target.value)
               }
-              className=" w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white p-3 outline-none focus:border-blue-500 transition"
+              className="input-theme w-full rounded-lg p-3"
             >
               <option value="">
                 Select Subject
@@ -98,11 +102,13 @@ export default function GoalsPage() {
                 </option>
               ))}
             </select>
-            <input type="date" value={deadline}
+            <input
+              type="date"
+              value={deadline}
               onChange={(e) =>
                 setDeadline(e.target.value)
               }
-              className=" w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white p-3 outline-none focus:border-blue-500 transition"
+              className="input-theme w-full rounded-lg p-3"
             />
             <Button onClick={addGoal}>
               Add Goal
@@ -112,7 +118,7 @@ export default function GoalsPage() {
         <div className="space-y-6 lg:col-span-2">
           {goals.length === 0 ? (
             <Card>
-              <p className="text-center text-slate-500 dark:text-slate-300">
+              <p className="text-muted text-center">
                 No goals added yet.
               </p>
             </Card>

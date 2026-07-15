@@ -1,9 +1,12 @@
 import useUserLocalStorage from "./useUserLocalStorage";
-import { TIMER_DURATION } from "@/data/timer";
 import { StudySession } from "@/types/planner";
 import { Goal } from "@/types/goal";
 import { Note } from "@/types/note";
 import { TimerState } from "@/types/timer";
+import {
+  DEFAULT_TIMER_STATE,
+  getUpdatedTimerState,
+} from "@/utils/timerState";
 
 export default function useDashboardData() {
   const [planner] = useUserLocalStorage<StudySession[]>(
@@ -17,13 +20,10 @@ export default function useDashboardData() {
   );
   const [timer] = useUserLocalStorage<TimerState>(
     "study-timer",
-    {
-      mode: "Pomodoro",
-      timeLeft: TIMER_DURATION.Pomodoro,
-      isRunning: false,
-      completedSessions: 0,
-    }
+    DEFAULT_TIMER_STATE
   );
+  const currentTimer =
+    getUpdatedTimerState(timer);
   const completedGoals = goals.filter(
     (goal) => goal.progress >= 100
   ).length;
@@ -37,10 +37,10 @@ export default function useDashboardData() {
     ).length;
   const pendingPlanner = planner.length - completedPlanner;
   const totalNotes = notes.length;
-  const totalSessions = timer.completedSessions;
+  const totalSessions = currentTimer.completedSessions;
 
   return {
-    planner, notes, goals, timer,
+    planner, notes, goals, timer: currentTimer,
     completedGoals, pendingGoals,
     completionRate,
     completedPlanner, pendingPlanner,

@@ -68,7 +68,12 @@ export default function Sidebar({
           style={{ borderColor: "var(--border)" }}
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <Link
+              href="/"
+              onClick={onClose}
+              className="flex items-center gap-4 rounded-2xl transition hover:opacity-90"
+              aria-label="Go to dashboard"
+            >
               <div className="gradient-primary flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-lg">
                 <FontAwesomeIcon icon={faGraduationCap} className="text-2xl"/>
               </div>
@@ -80,7 +85,7 @@ export default function Sidebar({
                   {user?.email}
                 </p>
               </div>
-            </div>
+            </Link>
             <button onClick={onClose} aria-label="Close Sidebar" className="icon-button rounded-xl p-2 lg:hidden">
               <FontAwesomeIcon icon={faXmark} className="text-xl"/>
             </button>

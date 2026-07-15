@@ -31,7 +31,7 @@ export default function NotesPage() {
         <h1 className="text-4xl font-bold">
           Study Notes
         </h1>
-        <p className="mt-2 text-slate-500">
+        <p className="text-muted mt-2">
           Save important notes for quick revision.
         </p>
       </div>
@@ -41,11 +41,11 @@ export default function NotesPage() {
         </div>
         <div className="space-y-6 lg:col-span-2">
           {notes.length === 0 ? (
-            <div className="rounded-2xl bg-white p-10 text-center shadow">
+            <div className="dashboard-card p-10 text-center">
               <h2 className="text-xl font-semibold">
                 No Notes Yet
               </h2>
-              <p className="mt-2 text-slate-500">
+              <p className="text-muted mt-2">
                 Create your first study note.
               </p>
             </div>

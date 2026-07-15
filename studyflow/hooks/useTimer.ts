@@ -1,84 +1,34 @@
 "use client";
 
-import { useEffect } from "react";
-
 import useUserLocalStorage from "./useUserLocalStorage";
 
 import { TIMER_DURATION } from "@/data/timer";
 import { TimerMode, TimerState } from "@/types/timer";
 import { formatTime } from "@/utils/formatTime";
+import {
+  DEFAULT_TIMER_STATE,
+} from "@/utils/timerState";
 
 export default function useTimer() {
   const [timer, setTimer] = useUserLocalStorage<TimerState>(
     "study-timer",
-    {
-      mode: "Pomodoro",
-      timeLeft: TIMER_DURATION.Pomodoro,
-      isRunning: false,
-      completedSessions: 0,
-    }
+    DEFAULT_TIMER_STATE
   );
-
-  useEffect(() => {
-    if (!timer.isRunning) return;
-
-    function syncTimer() {
-      setTimer((previous) => {
-        if (!previous.isRunning) {
-          return previous;
-        }
-
-        const endAt =
-          previous.endAt ??
-          Date.now() +
-            previous.timeLeft * 1000;
-        const nextTimeLeft = Math.max(
-          0,
-          Math.ceil(
-            (endAt - Date.now()) / 1000
-          )
-        );
-
-        if (nextTimeLeft <= 0) {
-          const completedSessions =
-            previous.mode === "Pomodoro"
-              ? previous.completedSessions + 1
-              : previous.completedSessions;
-
-          return {
-            ...previous,
-            timeLeft: 0,
-            isRunning: false,
-            endAt: undefined,
-            completedSessions,
-          };
-        }
-
-        return {
-          ...previous,
-          endAt,
-          timeLeft: nextTimeLeft,
-        };
-      });
-    }
-
-    syncTimer();
-
-    const interval = setInterval(
-      syncTimer,
-      1000
-    );
-
-    return () => clearInterval(interval);
-  }, [timer.isRunning, setTimer]);
 
   function startTimer() {
     setTimer((previous) => ({
       ...previous,
+      timeLeft:
+        previous.timeLeft > 0
+          ? previous.timeLeft
+          : TIMER_DURATION[previous.mode],
       isRunning: true,
       endAt:
         Date.now() +
-        previous.timeLeft * 1000,
+        (previous.timeLeft > 0
+          ? previous.timeLeft
+          : TIMER_DURATION[previous.mode]) *
+          1000,
     }));
   }
 
