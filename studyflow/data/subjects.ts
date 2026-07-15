@@ -1,0 +1,17 @@
+export const subjects = [
+  "React",
+  "Next.js",
+  "JavaScript",
+  "TypeScript",
+  "HTML",
+  "CSS",
+  "Tailwind CSS",
+  "Java",
+  "Python",
+  "Data Structures",
+  "Algorithms",
+  "DBMS",
+  "Operating Systems",
+  "Computer Networks",
+  "Software Engineering",
+];
