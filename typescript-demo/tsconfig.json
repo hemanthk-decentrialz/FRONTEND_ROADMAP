@@ -15,7 +15,7 @@
     "verbatimModuleSyntax": false,
     "isolatedModules": false,
     "noUncheckedSideEffectImports": false,
-    "moduleDetection": "auto",
+    "moduleDetection": "force",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
