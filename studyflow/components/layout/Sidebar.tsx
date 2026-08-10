@@ -5,8 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faCalendarDays, faNoteSticky, faClock, faBullseye, faGear, faXmark, faGraduationCap, faCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faCalendarDays, faNoteSticky, faClock, faBullseye, faGear, faXmark, faGraduationCap, faCircle} from "@fortawesome/free-solid-svg-icons";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -28,8 +27,7 @@ export default function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
   const { user } = useAuth();
-  const previousPathname =
-    useRef(pathname);
+  const previousPathname = useRef(pathname);
 
   useEffect(() => {
     function handleEscape(event: KeyboardEvent) {
@@ -44,68 +42,48 @@ export default function Sidebar({
   }, [onClose]);
 
   useEffect(() => {
-    if (
-      previousPathname.current !==
-      pathname
-    ) {
+    if (previousPathname.current !== pathname) {
       previousPathname.current = pathname;
 
       if (isOpen) {
         onClose();
       }
     }
-  }, [pathname, isOpen, onClose]);
+  }, [isOpen, onClose, pathname]);
 
-  useEffect(() => {
-    if (!isOpen) {
-      previousPathname.current = pathname;
-    }
-  }, [pathname, isOpen]);
-  
   return (
     <>
-      {isOpen && (
-        <div
-          onClick={onClose}
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
-        />
-      )}
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-dvh w-80 max-w-full flex-col border-r transition-transform duration-300 ease-in-out
-        ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }
-        lg:sticky lg:top-0 lg:translate-x-0`}
-        style={{ background: "var(--card)", color: "var(--foreground)", borderColor: "var(--border)", boxShadow: "var(--shadow)",
-        }}
+        className={`fixed left-0 top-0 z-50 flex h-dvh w-80 max-w-[90vw] flex-col border-r transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+        style={{ background: "var(--card)", color: "var(--foreground)", borderColor: "var(--border)", boxShadow: "var(--shadow)" }}
       >
         {/* Logo */}
-        <div className="shrink-0 border-b p-4 sm:p-6" style={{ borderColor: "var(--border)" }}>
+        <div className="border-b p-6" style={{ borderColor: "var(--border)" }}>
           <div className="flex items-center justify-between">
             <Link href="/" onClick={onClose}
               className="flex items-center gap-4 rounded-2xl transition hover:opacity-90"
               aria-label="Go to dashboard"
             >
-              <div className="gradient-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-white shadow-lg sm:h-14 sm:w-14">
+              <div className="gradient-primary flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-lg">
                 <FontAwesomeIcon icon={faGraduationCap} className="text-2xl"/>
               </div>
-              <div className="min-w-0">
-                <h1 className="text-xl font-bold tracking-wide sm:text-2xl" style={{ color: "var(--foreground)" }}>
+              <div>
+                <h1 className="text-2xl font-bold tracking-wide" style={{ color: "var(--foreground)" }}>
                   StudyFlow
                 </h1>
-                <p className="text-muted truncate text-sm" suppressHydrationWarning>
+                <p className="text-muted text-sm" suppressHydrationWarning>
                   {user?.email}
                 </p>
               </div>
             </Link>
-            <button onClick={onClose} aria-label="Close Sidebar" className="icon-button rounded-xl p-2 lg:hidden">
+            <button onClick={onClose} aria-label="Close Sidebar" className="icon-button rounded-xl p-2">
               <FontAwesomeIcon icon={faXmark} className="text-xl"/>
             </button>
           </div>
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto pb-4">
         {/* Welcome */}
-        <div className="mx-4 mt-4 gradient-primary rounded-2xl p-4 shadow-lg text-white sm:mx-5 sm:mt-6 sm:p-5">
+        <div className="gradient-primary mx-5 mt-6 rounded-2xl p-5 text-white shadow-lg">
           <p className="text-sm text-white/80">
             Welcome back
           </p>
@@ -117,26 +95,27 @@ export default function Sidebar({
           </p>
         </div>
         {/* Navigation */}
-        <nav className="mt-5 px-4 sm:mt-8">
+        <nav className="mt-8 flex-1 overflow-y-auto px-4">
           <p className="text-muted mb-4 px-3 text-xs font-semibold uppercase tracking-[0.2em]">
             Main Menu
           </p>
           {menuItems.map((item) => {
             const active = pathname === item.href;
             return (
-              <Link key={item.href} href={item.href} onClick={onClose} className={`group mb-3 flex items-center gap-4 rounded-2xl px-5 py-4 transition-all duration-300 
-                ${
-                  active ? "gradient-primary text-white shadow-lg" : "surface-hover hover:translate-x-1"
-                }`}
-                style={ active ? {
-                        background: "var(--primary)",
-                        color: "#fff",
-                        boxShadow: "var(--shadow)",
-                      } : {}
-                }
+              <Link key={item.href} href={item.href} onClick={onClose}
+                className={`group mb-3 flex items-center gap-4 rounded-2xl px-5 py-4 transition-all duration-300
+                  ${
+                    active
+                      ? "gradient-primary text-white shadow-lg"
+                      : "surface-hover hover:translate-x-1"
+                  }`}
+                style={ active ? { background: "var(--primary)", color: "#fff", boxShadow: "var(--shadow)" } : {} }
               >
-                <FontAwesomeIcon icon={item.icon} className={`w-5 transition-colors 
-                ${ active ? "text-white" : "text-blue-500 group-hover:text-blue-600"
+                <FontAwesomeIcon icon={item.icon}
+                  className={`w-5 transition-colors ${
+                    active
+                      ? "text-white"
+                      : "text-blue-500 group-hover:text-blue-600"
                   }`}
                 />
                 <span className="font-medium">
@@ -149,9 +128,8 @@ export default function Sidebar({
             );
           })}
         </nav>
-        </div>
         {/* Footer */}
-        <div className="shrink-0 border-t p-4 sm:p-5" style={{ borderColor: "var(--border)" }}>
+        <div className="border-t p-5" style={{ borderColor: "var(--border)" }}>
           <div className="surface rounded-2xl p-4">
             <div className="flex items-center justify-between">
               <div>

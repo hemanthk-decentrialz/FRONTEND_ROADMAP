@@ -39,5 +39,14 @@ export async function POST(request: NextRequest) {
     email: user.email,
   };
 
-  return success(sessionUser, "Login successful.");
+  const response = success(sessionUser, "Login successful.");
+
+  response.cookies.set("studyflow-session-id", user.id, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30,
+  });
+
+  return response;
 }

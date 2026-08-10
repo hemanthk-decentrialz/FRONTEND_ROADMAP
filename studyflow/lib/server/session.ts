@@ -1,12 +1,11 @@
 import { NextRequest } from "next/server";
-
 import { readDb } from "@/lib/server/db";
 import { failure } from "@/lib/server/response";
 
 export async function requireUser(
   request: NextRequest
 ) {
-  const userId = request.headers.get("x-user-id");
+  const userId = request.headers.get("x-user-id") ?? request.cookies.get("studyflow-session-id")?.value;
 
   if (!userId) {
     return {

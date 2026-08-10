@@ -32,21 +32,15 @@ export default function DashboardLayout({
         color: "var(--foreground)",
       }}
     >
-      {/* Sidebar */}
-
-      <div className="shrink-0 lg:sticky lg:top-0 lg:h-screen">
-        <Sidebar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-        />
-      </div>
-
-      {/* Mobile Overlay */}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
 
       {isSidebarOpen && (
         <div
           onClick={() => setIsSidebarOpen(false)}
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
         />
       )}
 

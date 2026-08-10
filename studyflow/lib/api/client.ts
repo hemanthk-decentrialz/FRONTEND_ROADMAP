@@ -66,6 +66,8 @@ export async function apiRequest<T>(
   const response = await fetch(endpoint, {
     method: options.method ?? "GET",
     headers,
+    credentials: "same-origin",
+    cache: "no-store",
     body:
       options.body === undefined
         ? undefined

@@ -23,7 +23,7 @@ export default function Header({
     <header className="glass sticky top-0 z-30 flex items-center justify-between border-b px-5 py-4 backdrop-blur-xl" style={{ borderColor: "var(--border)", }}>
       {/* Left */}
       <div className="flex items-center gap-4">
-        <button onClick={onMenuClick} aria-label="Open navigation" className="icon-button rounded-xl p-3 transition lg:hidden">
+        <button onClick={onMenuClick} aria-label="Open navigation" className="icon-button rounded-xl p-3 transition">
           <FontAwesomeIcon icon={faBars} className="text-lg"/>
         </button>
         <div>
