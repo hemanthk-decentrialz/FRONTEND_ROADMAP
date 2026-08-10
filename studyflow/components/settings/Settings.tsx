@@ -3,8 +3,11 @@
 import { useEffect } from "react";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import useAuth from "@/hooks/useAuth";
+import useUserLocalStorage from "@/hooks/useUserLocalStorage";
+import { resetStudyData } from "@/lib/api/settings";
+import { StudyFlowSettings } from "@/types/settings";
+import { DEFAULT_SETTINGS } from "@/utils/settingsState";
 import {
   faMoon,
   faSun,
@@ -14,11 +17,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Settings() {
   const { user } = useAuth();
-  const [theme, setTheme] =
-    useLocalStorage<"light" | "dark">(
-      "theme",
-      "light"
+  const [settings, setSettings] =
+    useUserLocalStorage<StudyFlowSettings>(
+      "settings",
+      DEFAULT_SETTINGS
     );
+  const theme = settings.theme;
 
   useEffect(() => {
     document.documentElement.classList.remove(
@@ -27,22 +31,39 @@ export default function Settings() {
     );
 
     document.documentElement.classList.add(theme);
+    localStorage.setItem(
+      "theme",
+      JSON.stringify(theme)
+    );
   }, [theme]);
 
   function toggleTheme() {
-    setTheme((previous) =>
-      previous === "light"
-        ? "dark"
-        : "light"
-    );
+    setSettings((previous) => ({
+      ...previous,
+      theme:
+        previous.theme === "light"
+          ? "dark"
+          : "light",
+    }));
   }
 
-  function resetApplication() {
+  async function resetApplication() {
     if (
       confirm(
         "Delete your saved StudyFlow data?"
       )
     ) {
+      try {
+        await resetStudyData();
+      } catch (error) {
+        alert(
+          error instanceof Error
+            ? error.message
+            : "Unable to reset your data."
+        );
+        return;
+      }
+
       if (user) {
         Object.keys(localStorage)
           .filter((key) =>

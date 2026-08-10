@@ -4,10 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
-import {
-  findUserByEmail,
-  verifyPassword,
-} from "@/lib/auth";
+import { login as loginRequest } from "@/lib/api/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, faGraduationCap} from "@fortawesome/free-solid-svg-icons";
 
@@ -35,25 +32,21 @@ export default function LoginForm() {
       );
       return;
     }
-    const user = findUserByEmail(trimmedEmail);
-    if (!user) {
+    try {
+      const user = await loginRequest({
+        email: trimmedEmail,
+        password,
+      });
+
+      login(user);
+      router.replace("/");
+    } catch (error) {
       setError(
-        "No account found with this email."
+        error instanceof Error
+          ? error.message
+          : "Login failed."
       );
-      return;
     }
-    if (!(await verifyPassword(user, password))) {
-      setError(
-        "Incorrect password."
-      );
-      return;
-    }
-    login({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    });
-    router.replace("/");
   }
   return (
     <div className="w-full max-w-md rounded-3xl bg-(--card) p-8 shadow-2xl">

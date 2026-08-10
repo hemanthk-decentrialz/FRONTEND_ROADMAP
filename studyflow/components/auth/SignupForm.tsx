@@ -3,12 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  findUserByEmail,
-  hashPassword,
-  registerUser,
-} from "@/lib/auth";
-import { User } from "@/types/auth";
+import { signup } from "@/lib/api/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, faGraduationCap} from "@fortawesome/free-solid-svg-icons";
 
@@ -54,22 +49,24 @@ export default function SignupForm() {
       setError("Passwords do not match.");
       return;
     }
-    const existingUser = findUserByEmail(trimmedEmail);
-    if (existingUser) {
-      setError("An account already exists with this email.");
-      return;
+    try {
+      await signup({
+        name: trimmedName,
+        email: trimmedEmail,
+        password,
+      });
+
+      setSuccess("Account created successfully! Redirecting to Login...");
+      window.setTimeout(() => {
+        router.replace("/login");
+      }, 1500);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Signup failed."
+      );
     }
-    const newUser: User = {
-      id: crypto.randomUUID(),
-      name: trimmedName,
-      email: trimmedEmail,
-      passwordHash: await hashPassword(password),
-    };
-    registerUser(newUser);
-    setSuccess("Account created successfully! Redirecting to Login...");
-    window.setTimeout(() => {
-      router.replace("/login");
-    }, 1500);
   }
     return (
     <div className="w-full max-w-md rounded-3xl bg-(--card) p-8 shadow-2xl">
