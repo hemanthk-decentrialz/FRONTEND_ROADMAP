@@ -14,14 +14,7 @@ import { Note } from "@/types/note";
 import { StudySession } from "@/types/planner";
 import { StudyFlowSettings } from "@/types/settings";
 import { TimerState } from "@/types/timer";
-
-function isUnauthorizedApiError(error: unknown) {
-  return (
-    error instanceof Error &&
-    "status" in error &&
-    error.status === 401
-  );
-}
+import { isUnauthorizedApiError } from "@/lib/api/client";
 
 export default function useUserLocalStorage<T>(
   key: string,
