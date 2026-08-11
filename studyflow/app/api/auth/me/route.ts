@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-
 import { success } from "@/lib/server/response";
 import { requireUser } from "@/lib/server/session";
 

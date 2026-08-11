@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-
 import useAuth from "@/hooks/useAuth";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { getGoals, saveGoals } from "@/lib/api/goals";
@@ -14,7 +13,14 @@ import { Note } from "@/types/note";
 import { StudySession } from "@/types/planner";
 import { StudyFlowSettings } from "@/types/settings";
 import { TimerState } from "@/types/timer";
-import { isUnauthorizedApiError } from "@/lib/api/client";
+
+function isUnauthorizedApiError(error: unknown) {
+  return (
+    error instanceof Error &&
+    "status" in error &&
+    error.status === 401
+  );
+}
 
 export default function useUserLocalStorage<T>(
   key: string,
@@ -22,10 +28,7 @@ export default function useUserLocalStorage<T>(
 ) {
   const { user, logout } = useAuth();
   const loadedKeyRef = useRef<string | null>(null);
-  const scopedKey = user
-    ? `user:${user.id}:${key}`
-    : `user:anonymous:${key}`;
-
+  const scopedKey = user ? `user:${user.id}:${key}` : `user:anonymous:${key}`;
   const [value, setValue] = useLocalStorage<T>(
     scopedKey,
     initialValue
@@ -42,7 +45,6 @@ export default function useUserLocalStorage<T>(
     async function loadApiData() {
       try {
         const apiValue = await readApiValue<T>(key);
-
         if (isActive) {
           setValue(apiValue);
           loadedKeyRef.current = scopedKey;
@@ -52,17 +54,13 @@ export default function useUserLocalStorage<T>(
           logout();
           return;
         }
-
         console.error(
           `Failed to load "${key}" from API:`,
           error
         );
-        loadedKeyRef.current = scopedKey;
       }
     }
-
     loadApiData();
-
     return () => {
       isActive = false;
     };
@@ -78,14 +76,12 @@ export default function useUserLocalStorage<T>(
         logout();
         return;
       }
-
       console.error(
         `Failed to save "${key}" to API:`,
         error
       );
     });
   }, [key, logout, scopedKey, user, value]);
-
   return [value, setValue] as const;
 }
 
@@ -93,50 +89,38 @@ async function readApiValue<T>(key: string): Promise<T> {
   if (key === "planner") {
     return (await getPlanner()) as T;
   }
-
   if (key === "notes") {
     return (await getNotes()) as T;
   }
-
   if (key === "goals") {
     return (await getGoals()) as T;
   }
-
   if (key === "study-timer") {
     return (await getTimer()) as T;
   }
-
   if (key === "settings") {
     return (await getSettings()) as T;
   }
-
   throw new Error(`Unsupported API storage key "${key}".`);
 }
 
-async function persistApiValue<T>(
-  key: string,
-  value: T
-) {
+async function persistApiValue<T>( key: string, value: T) {
   if (key === "planner") {
     await savePlanner(value as StudySession[]);
     return;
   }
-
   if (key === "notes") {
     await saveNotes(value as Note[]);
     return;
   }
-
   if (key === "goals") {
     await saveGoals(value as Goal[]);
     return;
   }
-
   if (key === "study-timer") {
     await saveTimer(value as TimerState);
     return;
   }
-
   if (key === "settings") {
     await saveSettings(value as StudyFlowSettings);
   }
