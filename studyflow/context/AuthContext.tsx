@@ -2,6 +2,8 @@
 
 import { createContext, useEffect, useContext, useMemo, useState, useSyncExternalStore, ReactNode } from "react";
 import { getSession, saveSession, clearSession } from "@/lib/auth";
+import { getCurrentUser, logout as logoutRequest } from "@/lib/api/auth";
+import { isUnauthorizedApiError } from "@/lib/api/client";
 import { SessionUser } from "@/types/auth";
 
 interface AuthContextType {
@@ -55,32 +57,73 @@ interface Props {
 
 export function AuthProvider({ children }: Props) {
   const [isValidatingSession, setIsValidatingSession] = useState(false);
+  const [isRestoringSession, setIsRestoringSession] = useState(true);
   const session = useSyncExternalStore<SessionSnapshot>( subscribeToSession, getSessionSnapshot, () => undefined );
   const user = session ?? null;
-  const isLoading = session === undefined || (user !== null && isValidatingSession);
+  const isLoading =
+    session === undefined ||
+    (session === null && isRestoringSession) ||
+    (user !== null && isValidatingSession);
+
+  useEffect(() => {
+    if (session === undefined || user) {
+      return;
+    }
+
+    let isActive = true;
+
+    async function restoreSessionFromCookie() {
+      try {
+        const restoredUser = await getCurrentUser();
+
+        if (isActive) {
+          saveSession(restoredUser);
+          notifySessionChange();
+        }
+      } catch (error) {
+        if (!isUnauthorizedApiError(error)) {
+          console.error(
+            "Failed to restore session from API:",
+            error
+          );
+        }
+       } finally {
+        if (isActive) {
+          setIsRestoringSession(false);
+        }
+      }
+    }
+    restoreSessionFromCookie();
+    return () => {
+      isActive = false;
+    };
+  }, [session, user]);
+
   useEffect(() => {
     if (!user) {
       return;
     }
     const userId = user.id;
     let isActive = true;
-
     async function validateSession() {
       setIsValidatingSession(true);
       try {
-        const response = await fetch("/api/auth/me", {
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-            "x-user-id": userId,
-          },
-        });
-        if (response.status === 401 && isActive) {
+        const currentUser = await getCurrentUser();
+        if (
+          isActive &&
+          currentUser.id !== userId
+        ) {
+          saveSession(currentUser);
+          notifySessionChange();
+        }
+      } catch (error) {
+        if (
+          isActive &&
+          isUnauthorizedApiError(error)
+        ) {
           clearSession();
           notifySessionChange();
         }
-      } catch {
-
       } finally {
         if (isActive) {
           setIsValidatingSession(false);
@@ -88,34 +131,24 @@ export function AuthProvider({ children }: Props) {
       }
     }
     validateSession();
-
     return () => {
       isActive = false;
     };
   }, [user]);
-
   function login( user: SessionUser ) {
     saveSession(user);
     notifySessionChange();
   }
-
   function logout() {
-    fetch("/api/auth/logout", {
-      method: "POST",
-      credentials: "same-origin",
-    }).catch(() => {
-      
-    });
+    logoutRequest().catch(() => undefined);
     clearSession();
     notifySessionChange();
   }
-
   const value = useMemo(() => ({
       user, isLoading, isAuthenticated: user !== null,
       login, logout,
     }), [user, isLoading]
   );
-
   return (
     <AuthContext.Provider value={value}>
       {children}
@@ -130,6 +163,5 @@ export function useAuthContext() {
       "useAuthContext must be used inside AuthProvider."
     );
   }
-
   return context;
 }

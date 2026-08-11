@@ -27,3 +27,14 @@ export function login(payload: LoginPayload) {
     auth: false,
   });
 }
+
+export function getCurrentUser() {
+  return apiRequest<SessionUser>("/api/auth/me");
+}
+
+export function logout() {
+  return apiRequest<{ loggedOut: true }>("/api/auth/logout", {
+    method: "POST",
+    auth: false,
+  });
+}
