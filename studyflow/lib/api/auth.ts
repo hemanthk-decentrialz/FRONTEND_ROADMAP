@@ -16,7 +16,6 @@ export function signup(payload: SignupPayload) {
   return apiRequest<SessionUser>("/api/auth/signup", {
     method: "POST",
     body: payload,
-    auth: false,
   });
 }
 
@@ -24,17 +23,17 @@ export function login(payload: LoginPayload) {
   return apiRequest<SessionUser>("/api/auth/login", {
     method: "POST",
     body: payload,
-    auth: false,
   });
 }
 
 export function getCurrentUser() {
-  return apiRequest<SessionUser>("/api/auth/me");
+  return apiRequest<SessionUser>("/api/auth/me", {
+    includeSessionHeader: false,
+  });
 }
 
 export function logout() {
   return apiRequest<{ loggedOut: true }>("/api/auth/logout", {
     method: "POST",
-    auth: false,
   });
 }

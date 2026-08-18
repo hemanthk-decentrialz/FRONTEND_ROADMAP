@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useEffect, useContext, useMemo, useState, useSyncExternalStore, ReactNode } from "react";
+import { createContext, useCallback, useEffect, useContext, useMemo, useState, useSyncExternalStore, ReactNode } from "react";
 import { getSession, saveSession, clearSession } from "@/lib/auth";
 import { getCurrentUser, logout as logoutRequest } from "@/lib/api/auth";
-import { isUnauthorizedApiError } from "@/lib/api/client";
+import { isUnauthorizedApiError, setConfirmedSessionUserId } from "@/lib/api/client";
 import { SessionUser } from "@/types/auth";
 
 interface AuthContextType {
@@ -12,7 +12,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (
     user: SessionUser
-  ) => void;
+  ) => Promise<void>;
   logout: () => void;
 }
 
@@ -56,20 +56,21 @@ interface Props {
 }
 
 export function AuthProvider({ children }: Props) {
-  const [isValidatingSession, setIsValidatingSession] = useState(false);
   const [isRestoringSession, setIsRestoringSession] = useState(true);
   const session = useSyncExternalStore<SessionSnapshot>( subscribeToSession, getSessionSnapshot, () => undefined );
   const user = session ?? null;
   const isLoading =
     session === undefined ||
-    (session === null && isRestoringSession) ||
-    (user !== null && isValidatingSession);
+    isRestoringSession;
+
+  const logout = useCallback(() => {
+    logoutRequest().catch(() => undefined);
+    setConfirmedSessionUserId(null);
+    clearSession();
+    notifySessionChange();
+  }, []);
 
   useEffect(() => {
-    if (session === undefined || user) {
-      return;
-    }
-
     let isActive = true;
 
     async function restoreSessionFromCookie() {
@@ -77,10 +78,17 @@ export function AuthProvider({ children }: Props) {
         const restoredUser = await getCurrentUser();
 
         if (isActive) {
+          setConfirmedSessionUserId(restoredUser.id);
           saveSession(restoredUser);
           notifySessionChange();
         }
       } catch (error) {
+        if (isActive) {
+          setConfirmedSessionUserId(null);
+          clearSession();
+          notifySessionChange();
+        }
+
         if (!isUnauthorizedApiError(error)) {
           console.error(
             "Failed to restore session from API:",
@@ -97,57 +105,34 @@ export function AuthProvider({ children }: Props) {
     return () => {
       isActive = false;
     };
-  }, [session, user]);
+  }, []);
+  const login = useCallback(async (user: SessionUser) => {
+    setIsRestoringSession(true);
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-    const userId = user.id;
-    let isActive = true;
-    async function validateSession() {
-      setIsValidatingSession(true);
-      try {
-        const currentUser = await getCurrentUser();
-        if (
-          isActive &&
-          currentUser.id !== userId
-        ) {
-          saveSession(currentUser);
-          notifySessionChange();
-        }
-      } catch (error) {
-        if (
-          isActive &&
-          isUnauthorizedApiError(error)
-        ) {
-          clearSession();
-          notifySessionChange();
-        }
-      } finally {
-        if (isActive) {
-          setIsValidatingSession(false);
-        }
+    try {
+      const confirmedUser = await getCurrentUser();
+
+      if (confirmedUser.id !== user.id) {
+        throw new Error("Login session could not be verified.");
       }
+
+      setConfirmedSessionUserId(confirmedUser.id);
+      saveSession(confirmedUser);
+      notifySessionChange();
+    } catch (error) {
+      setConfirmedSessionUserId(null);
+      clearSession();
+      notifySessionChange();
+      throw error;
+    } finally {
+      setIsRestoringSession(false);
     }
-    validateSession();
-    return () => {
-      isActive = false;
-    };
-  }, [user]);
-  function login( user: SessionUser ) {
-    saveSession(user);
-    notifySessionChange();
-  }
-  function logout() {
-    logoutRequest().catch(() => undefined);
-    clearSession();
-    notifySessionChange();
-  }
+  }, []);
+
   const value = useMemo(() => ({
       user, isLoading, isAuthenticated: user !== null,
       login, logout,
-    }), [user, isLoading]
+    }), [user, isLoading, login, logout]
   );
   return (
     <AuthContext.Provider value={value}>

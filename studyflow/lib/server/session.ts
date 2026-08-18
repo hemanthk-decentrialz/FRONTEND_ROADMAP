@@ -10,7 +10,7 @@ export async function requireUser(
   const cookieUserId =
     request.cookies.get("studyflow-session-id")?.value;
 
-  if (!headerUserId && !cookieUserId) {
+  if (!cookieUserId && !headerUserId) {
     return {
       error: failure("Authentication required.", 401),
     };

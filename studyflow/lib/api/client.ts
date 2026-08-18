@@ -1,33 +1,17 @@
 import { ApiResponse } from "@/types/api";
 
-const SESSION_KEY = "studyflow-session";
+let confirmedSessionUserId: string | null = null;
 
-function getSessionUserId() {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-
-    if (!raw) {
-      return null;
-    }
-
-    const session = JSON.parse(raw) as {
-      id?: string;
-    };
-
-    return session.id ?? null;
-  } catch {
-    return null;
-  }
+export function setConfirmedSessionUserId(
+  userId: string | null
+) {
+  confirmedSessionUserId = userId;
 }
 
 interface ApiRequestOptions {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
-  auth?: boolean;
+  includeSessionHeader?: boolean;
 }
 
 export class ApiRequestError extends Error {
@@ -42,7 +26,9 @@ export class ApiRequestError extends Error {
 
 export function isUnauthorizedApiError(error: unknown) {
   return (
-    error instanceof ApiRequestError &&
+    typeof error === "object" &&
+    error !== null &&
+    "status" in error &&
     error.status === 401
   );
 }
@@ -55,18 +41,17 @@ export async function apiRequest<T>(
     "Content-Type": "application/json",
   };
 
-  if (options.auth !== false) {
-    const userId = getSessionUserId();
-
-    if (userId) {
-      headers["x-user-id"] = userId;
-    }
+  if (
+    options.includeSessionHeader !== false &&
+    confirmedSessionUserId
+  ) {
+    headers["x-user-id"] = confirmedSessionUserId;
   }
 
   const response = await fetch(endpoint, {
     method: options.method ?? "GET",
     headers,
-    credentials: "same-origin",
+    credentials: "include",
     cache: "no-store",
     body:
       options.body === undefined
@@ -74,7 +59,12 @@ export async function apiRequest<T>(
         : JSON.stringify(options.body),
   });
 
-  const payload = (await response.json()) as ApiResponse<T>;
+  const payload = (await response
+    .json()
+    .catch(() => ({
+      ok: false,
+      error: `API request failed with status ${response.status}.`,
+    }))) as ApiResponse<T>;
 
   if (!payload.ok) {
     throw new ApiRequestError(
