@@ -8,19 +8,29 @@ import useUserLocalStorage from "@/hooks/useUserLocalStorage";
 import { resetStudyData } from "@/lib/api/settings";
 import { StudyFlowSettings } from "@/types/settings";
 import { DEFAULT_SETTINGS } from "@/utils/settingsState";
-import {
-  faMoon,
-  faSun,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMoon, faSun, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+function getInitialSettings(): StudyFlowSettings {
+  if (typeof window === "undefined") {
+    return DEFAULT_SETTINGS;
+  }
+
+  return {
+    ...DEFAULT_SETTINGS,
+    theme:
+      localStorage.getItem("theme") === '"dark"'
+        ? "dark"
+        : "light",
+  };
+}
 
 export default function Settings() {
   const { user } = useAuth();
   const [settings, setSettings] =
     useUserLocalStorage<StudyFlowSettings>(
       "settings",
-      DEFAULT_SETTINGS
+      getInitialSettings()
     );
   const theme = settings.theme;
 

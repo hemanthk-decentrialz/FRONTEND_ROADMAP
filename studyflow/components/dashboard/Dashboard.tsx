@@ -3,35 +3,23 @@
 import WelcomeCard from "./WelcomeCard";
 import StatsCard from "./StatsCard";
 import useDashboardData from "@/hooks/useDashboardData";
+import FullPageLoader from "@/components/ui/FullPageLoader";
 import { faBook, faNoteSticky, faBullseye, faClock} from "@fortawesome/free-solid-svg-icons";
 
 export default function Dashboard() {
-  const {
-    planner,
-    notes,
-    goals,
-    timer,
-    completedGoals,
-    completionRate,
-    completedPlanner,
-  } = useDashboardData();
-  const plannerCompletion =
-    planner.length === 0
-      ? 0
-      : Math.round(
-          (completedPlanner / planner.length) * 100
-        );
-  const activeGoalTitle =
-    goals.find((goal) => goal.progress < 100)?.title ??
-    "No active goals";
+  const { summary, isLoading } = useDashboardData();
+
+  if (isLoading || !summary) {
+    return <FullPageLoader label="Loading your dashboard..." />;
+  }
 
   return (
     <main className="mx-auto max-w-7xl space-y-8 animate-fade pb-12 lg:pb-16">
       <WelcomeCard
-        completedPlanner={completedPlanner}
-        plannerCount={planner.length}
-        activeGoalTitle={activeGoalTitle}
-        completedSessions={timer.completedSessions}
+        completedPlanner={summary.completedPlanner}
+        plannerCount={summary.plannerCount}
+        activeGoalTitle={summary.activeGoalTitle}
+        completedSessions={summary.totalSessions}
       />
       <section>
         <div className="mb-5 flex items-center justify-between">
@@ -50,23 +38,23 @@ export default function Dashboard() {
               color: "var(--primary)",
             }}
           >
-            {completionRate}% Goals Completed
+            {summary.completionRate}% Goals Completed
           </span>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           <StatsCard
             title="Study Sessions"
-            value={planner.length}
+            value={summary.plannerCount}
             icon={faBook}
             color="gradient-primary"
-            detail={`${completedPlanner} completed`}
-            progress={plannerCompletion}
+            detail={`${summary.completedPlanner} completed`}
+            progress={summary.plannerCompletionRate}
           />
 
           <StatsCard
             title="Notes"
-            value={notes.length}
+            value={summary.totalNotes}
             icon={faNoteSticky}
             color="gradient-success"
             detail="Saved notes"
@@ -74,23 +62,22 @@ export default function Dashboard() {
 
           <StatsCard
             title="Goals"
-            value={goals.length}
+            value={summary.totalGoals}
             icon={faBullseye}
             color="gradient-warning"
-            detail={`${completedGoals} completed`}
-            progress={completionRate}
+            detail={`${summary.completedGoals} completed`}
+            progress={summary.completionRate}
           />
 
           <StatsCard
             title="Pomodoro Sessions"
-            value={timer.completedSessions}
+            value={summary.totalSessions}
             icon={faClock}
             color="gradient-danger"
             detail="Focus sessions"
           />
         </div>
       </section>
-
     </main>
   );
 }

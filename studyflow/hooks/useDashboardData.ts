@@ -1,75 +1,64 @@
 "use client";
 
-import { useEffect } from "react";
-import useUserLocalStorage from "./useUserLocalStorage";
+import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { getDashboardSummary } from "@/lib/api/dashboard";
-import { StudySession } from "@/types/planner";
-import { Goal } from "@/types/goal";
-import { Note } from "@/types/note";
-import { TimerState } from "@/types/timer";
-import {
-  DEFAULT_TIMER_STATE,
-  getUpdatedTimerState,
-} from "@/utils/timerState";
+import { isUnauthorizedApiError } from "@/lib/api/client";
+import { DashboardSummary } from "@/types/api";
 
 export default function useDashboardData() {
-  const { user } = useAuth();
-  const [planner] = useUserLocalStorage<StudySession[]>(
-    "planner",[]
-  );
-  const [notes] = useUserLocalStorage<Note[]>(
-    "notes",[]
-  );
-  const [goals] = useUserLocalStorage<Goal[]>(
-    "goals",[]
-  );
-  const [timer] = useUserLocalStorage<TimerState>(
-    "study-timer",
-    DEFAULT_TIMER_STATE
-  );
-  const currentTimer =
-    getUpdatedTimerState(timer);
-
-  const completedGoals = goals.filter(
-    (goal) => goal.progress >= 100
-  ).length;
-  const completionRate =
-    goals.length === 0 ? 0 : Math.round((completedGoals / goals.length) * 100);
-  const pendingGoals =
-    goals.length - completedGoals;
-  const completedPlanner =
-    planner.filter(
-      (session) => session.completed
-    ).length;
-  const pendingPlanner = planner.length - completedPlanner;
-  const totalNotes = notes.length;
-  const totalSessions = currentTimer.completedSessions;
+  const { user, isLoading: isAuthLoading } = useAuth();
+  const [data, setData] = useState<{
+    userId: string | null;
+    summary: DashboardSummary | null;
+  }>({
+    userId: null,
+    summary: null,
+  });
+  const isLoading = isAuthLoading || (user !== null && data.userId !== user.id);
 
   useEffect(() => {
-    if (!user) {
+    if (isAuthLoading || !user) {
       return;
     }
 
-    getDashboardSummary().catch((error) => {
-      console.error(
-        "Failed to load dashboard summary from API:",
-        error
-      );
-    });
-  }, [user, completedGoals, completedPlanner, goals.length, notes.length, planner.length, totalSessions]);
+    const userId = user.id;
+    let isActive = true;
+
+    getDashboardSummary()
+      .then((nextSummary) => {
+        if (isActive) {
+          setData({
+            userId,
+            summary: nextSummary,
+          });
+        }
+      })
+      .catch((error) => {
+        if (!isActive) {
+          return;
+        }
+
+        if (!isUnauthorizedApiError(error)) {
+          console.error(
+            "Failed to load dashboard summary:",
+            error
+          );
+        }
+
+        setData({
+          userId,
+          summary: null,
+        });
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [isAuthLoading, user]);
 
   return {
-    planner,
-    notes,
-    goals,
-    timer: currentTimer,
-    completedGoals,
-    pendingGoals,
-    completionRate,
-    completedPlanner,
-    pendingPlanner,
-    totalNotes,
-    totalSessions,
+    summary: data.summary,
+    isLoading,
   };
 }

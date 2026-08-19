@@ -15,11 +15,15 @@ export type ApiResponse<T> =
   | ApiFailure;
 
 export interface DashboardSummary {
+  plannerCount: number;
   completedGoals: number;
   pendingGoals: number;
+  totalGoals: number;
   completionRate: number;
   completedPlanner: number;
   pendingPlanner: number;
+  plannerCompletionRate: number;
   totalNotes: number;
   totalSessions: number;
+  activeGoalTitle: string;
 }

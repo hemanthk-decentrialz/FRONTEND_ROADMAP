@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-
 import { getUserData } from "@/lib/server/db";
 import { success } from "@/lib/server/response";
 import { requireUser } from "@/lib/server/session";
@@ -20,19 +19,28 @@ export async function GET(request: NextRequest) {
     (planner) => planner.completed
   ).length;
   const currentTimer = getUpdatedTimerState(userData.timer);
+  const plannerCount = userData.planner.length;
+  const totalGoals = userData.goals.length;
 
   return success({
+    plannerCount,
     completedGoals,
-    pendingGoals: userData.goals.length - completedGoals,
-    completionRate:
-      userData.goals.length === 0
+    pendingGoals: totalGoals - completedGoals,
+    totalGoals,
+    completionRate: totalGoals === 0
         ? 0
         : Math.round(
-            (completedGoals / userData.goals.length) * 100
+            (completedGoals / totalGoals) * 100
           ),
     completedPlanner,
-    pendingPlanner: userData.planner.length - completedPlanner,
+    pendingPlanner: plannerCount - completedPlanner,
+    plannerCompletionRate: plannerCount === 0
+        ? 0
+        : Math.round(
+            (completedPlanner / plannerCount) * 100
+          ),
     totalNotes: userData.notes.length,
     totalSessions: currentTimer.completedSessions,
+    activeGoalTitle: userData.goals.find((goal) => goal.progress < 100) ?.title ?? "No active goals",
   });
 }
